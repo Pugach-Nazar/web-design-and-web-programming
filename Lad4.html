@@ -120,5 +120,57 @@
         </ol>
     </div>
 
+    <form action="" method="get">
+        <fieldset>
+            <label>Форма</label>
+            <fieldset>
+
+                <legend>Контакти</legend>
+
+                <p>
+                    <lable for="name">Ім'я:</lable>
+                    <input id="name" name="name" type="text" placeholder="Наприкалад: Іван"/>
+                <p />
+                <p>
+                    <lable for="last_name">Прізвище:</lable>
+                    <input id="last_name"/>
+                <p />
+
+            </fieldset>
+
+            <fieldset>
+                <legend>Інші типи</legend>
+                <label>Виберіть найкращий колір</label><br />
+                <input type="radio" value="black" name="color" id="black" />
+                <label for=" black">Black</label><br />
+                <input type="radio" value="white" name="color" id="white" />
+                <lable for="white">White</lable>
+                <hr />
+                <lable>Чекбокс</lable> <br />
+                <input type="checkbox" name="color" id="yellow" value="yellow" />
+                <lable for="yellow">Жовтий</lable> <br />
+                <input type="checkbox" name="color" id="red" value="red" checked disabled />
+                <lable for="red">Червоний</lable> <br />
+                <input type="checkbox" name="color" id="green" value="green" checked/>
+                <lable for="green">Зелений</lable> <br />
+                <hr />
+                <label>Виберіть марку автомобіля</label>
+                <select id="car" name="car">
+                    <option value="toyota">Toyota</option>
+                    <option value="subaru">Subaru</option>
+                    <option value="nissan">Nissan</option>
+                    <option value="honda">Honda</option>
+                </select> <br />
+                <button type="button" onclick="alert('Гарний вибір')" >Кнопка</button>
+                <p>Якась інформація <br />
+                    <textarea rows="4" cols="15">Дуууже важлива інформація</textarea>
+                </p>
+                
+            </fieldset>
+        </fieldset>
+        <input type="submit"/>
+        
+    </form>
+
 </body>
 </html>
