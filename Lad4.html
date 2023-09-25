@@ -92,8 +92,8 @@
             <td>9:00-13:13</td>
             <td>9:00-13:13</td>
             <td>9:00-13:13</td>
-            <td>Вихідний</td>
-            <td>Вихідний</td>
+            <td colspan="2">Вихідний</td>
+            <!--<td>Вихідний</td>-->
         </tr>
 
 
@@ -128,12 +128,12 @@
                 <legend>Контакти</legend>
 
                 <p>
-                    <lable for="name">Ім'я:</lable>
+                    <label for="name">Ім'я:</label>
                     <input id="name" name="name" type="text" placeholder="Наприкалад: Іван"/>
                 <p />
                 <p>
-                    <lable for="last_name">Прізвище:</lable>
-                    <input id="last_name"/>
+                    <label for="last_name">Прізвище:</label>
+                    <input id="last_name" name="last_name"/>
                 <p />
 
             </fieldset>
@@ -141,19 +141,25 @@
             <fieldset>
                 <legend>Інші типи</legend>
                 <label>Виберіть найкращий колір</label><br />
-                <input type="radio" value="black" name="color" id="black" />
+                <input type="radio" value="black" name="color1" id="black" />
                 <label for=" black">Black</label><br />
-                <input type="radio" value="white" name="color" id="white" />
-                <lable for="white">White</lable>
+                <input type="radio" value="white" name="color1" id="white" />
+                <label for="white">White</label><br />
+                <input type="radio" value="blue" name="color1" id="blue"/>
+                <label for="blue">Blue</label>
                 <hr />
-                <lable>Чекбокс</lable> <br />
-                <input type="checkbox" name="color" id="yellow" value="yellow" />
-                <lable for="yellow">Жовтий</lable> <br />
-                <input type="checkbox" name="color" id="red" value="red" checked disabled />
-                <lable for="red">Червоний</lable> <br />
-                <input type="checkbox" name="color" id="green" value="green" checked/>
-                <lable for="green">Зелений</lable> <br />
+
+                <label>Чекбокс</label> <br />
+                <input type="checkbox" name="yellow" id="yellow" value="yellow" />
+                <label for="yellow">Жовтий</label> <br />
+
+                <input type="checkbox" name="red" id="red" value="red" checked hidden/>
+                <label for="red">Червоний</label> <br />
+
+                <input type="checkbox" name="green" id="green" value="green" checked/>
+                <label for="green">Зелений</label> <br />
                 <hr />
+
                 <label>Виберіть марку автомобіля</label>
                 <select id="car" name="car">
                     <option value="toyota">Toyota</option>
@@ -162,6 +168,7 @@
                     <option value="honda">Honda</option>
                 </select> <br />
                 <button type="button" onclick="alert('Гарний вибір')" >Кнопка</button>
+
                 <p>Якась інформація <br />
                     <textarea rows="4" cols="15">Дуууже важлива інформація</textarea>
                 </p>
