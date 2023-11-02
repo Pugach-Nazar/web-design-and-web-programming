@@ -1,0 +1,35 @@
+﻿@*
+   
+*@
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Купівля</title>
+    </head>
+    <body>
+        <h3>Форма купівлі</h3>
+        <form method="post" action="">
+            <input type="hidden" value="@ViewBag.BookId" name="BookId"/>
+            <table>
+                <tr>
+                    <td><p>Введіть своє ім'я</p></td>
+                    <td><input type="text" name="name" /></td>
+                </tr>
+                <tr>
+                    <td><p>Введіть адресу</p></td>
+                    <td><input type="text" name="Address" /></td>
+                </tr>
+                <tr>
+                    <td><input type="submit" value="Підтвердити" /></td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
+    </body>
+</html>
