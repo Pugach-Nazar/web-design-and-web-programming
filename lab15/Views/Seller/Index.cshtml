@@ -1,0 +1,37 @@
+﻿@model List<Seller>
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<h2>Devices list</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Description
+            </th>
+            <th>
+                More
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @item.Name
+                </td>
+                <td>
+                        @item.Description
+                </td>
+                <td>
+                    <a asp-action="Index">Edit</a> | <a asp-action="Index">Delete</a> | <a asp-action="Details">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
