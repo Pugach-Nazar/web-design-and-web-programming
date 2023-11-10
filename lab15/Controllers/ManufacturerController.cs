@@ -4,18 +4,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lab15.Controllers
 {
-    public class SellerController : Controller
+    public class ManufacturerController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public SellerController(ApplicationDbContext dbContext)
+        public ManufacturerController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
         public IActionResult Index()
         {
-            var devices = _dbContext.Sellers
-                .Include(s => s.Devices) 
+            var devices = _dbContext.Manufacturers
+                .Include(s => s.Devices)
                 .ToList();
 
             return View(devices);
@@ -27,21 +27,21 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            var seller = _dbContext.Sellers
+            var manufacturer = _dbContext.Manufacturers
                 .Include(s => s.Devices)
                 .FirstOrDefault(d => d.Id == Id);
-            
-            if (seller == null)
+
+            if (manufacturer == null)
             {
                 return NotFound();
             }
-            foreach (var device in seller.Devices)
+            foreach (var device in manufacturer.Devices)
             {
-                device.Manufacturer = _dbContext.Devices
-                    .Include(d => d.Manufacturer)
-                    .FirstOrDefault(device => device.Id == Id).Manufacturer;
+                device.Seller = _dbContext.Devices
+                    .Include(d => d.Seller)
+                    .FirstOrDefault(device => device.Id == Id).Seller;
             }
-            return View(seller);
+            return View(manufacturer);
         }
     }
 }

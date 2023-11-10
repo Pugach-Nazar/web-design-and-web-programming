@@ -37,7 +37,7 @@
                 <td>
                     @item.Price
                 <td>
-                        @item.Manufacturer.Name
+                    <a asp-controller="Manufacturer" asp-action="Details" asp-route-id="@item.Manufacturer.Id">@item.Manufacturer.Name</a> 
                 </td>
                 <td>
                     <a asp-controller="Seller" asp-action="Details" asp-route-id="@item.Seller.Id">@item.Seller.Name</a>

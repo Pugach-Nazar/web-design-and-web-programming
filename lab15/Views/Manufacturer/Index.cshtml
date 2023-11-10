@@ -1,9 +1,6 @@
-﻿@model List<Seller>
-@{
-    ViewData["Title"] = "Home Page";
-}
+﻿@model List<Manufacturer>
 
-<h2>Seller list</h2>
+<h2>Manufacturer list</h2>
 <table class="table">
     <thead>
         <tr>
@@ -12,6 +9,9 @@
             </th>
             <th>
                 Description
+            </th>
+            <th>
+                Country
             </th>
             <th>
                 More
@@ -29,7 +29,10 @@
                     @item.Description
                 </td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@item.Id">@("Other goods of the" + item.Name)</a>
+                    @item.Country
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.Id">Other products</a>
                 </td>
             </tr>
         }

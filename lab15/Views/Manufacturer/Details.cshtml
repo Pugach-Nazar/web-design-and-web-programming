@@ -1,8 +1,8 @@
-﻿@model lab15.Models.Seller
+﻿@model lab15.Models.Manufacturer
 
 <h2>Details</h2>
 <div>
-    <h4>Seller</h4>
+    <h4>Manufacturer</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
@@ -17,8 +17,14 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Description)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Country)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Country)
+        </dd>
     </dl>
-    <h3>@("Other goods of the " + Model.Name)</h3>
+    <h3>@("Other products of the " + Model.Name)</h3>
     <table class="table">
         <thead>
             <tr>
@@ -29,7 +35,7 @@
                     Price
                 </th>
                 <th>
-                    Manufacturer
+                    Seller
                 </th>
                 <th>
                     Description
@@ -41,13 +47,13 @@
             {
                 <tr>
                     <td>
-                        @item.Name 
+                        @item.Name
                     </td>
                     <td>
                         @item.Price
                     </td>
                     <td>
-                        @item.Manufacturer.Name
+                        @item.Seller.Name
                     </td>
                     <td>
                         @item.Description

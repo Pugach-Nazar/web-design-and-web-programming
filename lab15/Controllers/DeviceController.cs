@@ -27,7 +27,10 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            var devices = _dbContext.Devices.FirstOrDefault(d => d.Id == Id);
+            var devices = _dbContext.Devices
+                .Include (d => d.Manufacturer)
+                .Include(d => d.Seller)
+                .FirstOrDefault(d => d.Id == Id);
             if(devices == null)
             {
                 return NotFound();
