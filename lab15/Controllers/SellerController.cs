@@ -1,4 +1,5 @@
 ﻿using lab15.Data;
+using lab15.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -43,5 +44,24 @@ namespace lab15.Controllers
             }
             return View(seller);
         }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Seller seller)
+        {
+            if (seller != null)
+            {
+                _dbContext.Sellers.Add(seller);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(seller);
+        }
     }
 }
+    

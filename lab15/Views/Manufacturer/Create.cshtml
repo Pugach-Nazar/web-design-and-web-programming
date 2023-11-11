@@ -1,0 +1,17 @@
+﻿@model Manufacturer
+
+<h2>Create a new manufacturer</h2>
+<form method="post"> 
+    <div class="border p-3 mt-4">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <label asp-for="Country">Country</label>
+            <input asp-for="Country" class="form-control" />
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+   <a asp-action="Index">Back to list</a>
+</form>

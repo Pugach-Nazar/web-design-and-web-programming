@@ -1,4 +1,5 @@
 ﻿using lab15.Data;
+using lab15.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -36,6 +37,26 @@ namespace lab15.Controllers
                 return NotFound();
             }
             return View(devices);
+        }
+        
+        public async Task<IActionResult> Create()
+        {
+            ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
+            ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Device device)
+        {
+            if (device != null) 
+            {
+                _dbContext.Devices.AddAsync(device);
+                _dbContext.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            return View(device);
         }
     }
 }

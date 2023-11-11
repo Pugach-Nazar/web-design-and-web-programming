@@ -1,0 +1,32 @@
+﻿@model Device
+
+<h2>Create a new Device</h2>
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="form-group">
+            <label asp-for="Name">Name</label>
+            <input asp-for="Name" class="form-control" />
+            <label asp-for="Price">Price</label>
+            <input asp-for="Price" class="form-control"></input>
+            <label asp-for="ManufacturerId">Manufacturer</label>
+            <select asp-for="ManufacturerId" class="form-control">
+                @foreach (var man in ViewBag.Manufacturers as List<Manufacturer>)
+                {
+                    <option value="@man.Id">@man.Name</option>
+                }
+            </select>
+            <label asp-for="SellerId">Seller</label>
+            <select asp-for="SellerId" class="form-control">
+                @foreach (var seller in ViewBag.Sellers as List<Seller>)
+                {
+                    <option value="@seller.Id">@seller.Name</option>
+                }
+            </select>
+            <label asp-for="Description">Description</label>
+            <textarea asp-for="Description" class="form-control"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+    <a asp-action="Index">Back to list</a>
+</form>
