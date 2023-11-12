@@ -46,8 +46,19 @@
                     <td>
                         @item.Price
                     </td>
+                    @{
+                        string message = "???";
+                        foreach (var man in ViewBag.Manufacturers as List<Manufacturer>)
+                        {
+                            if(man.Id == item.ManufacturerId)
+                            {
+                                message = man.Name;
+                                break;
+                            }
+                        }
+                    }
                     <td>
-                        @item.Manufacturer.Name
+                        @message
                     </td>
                     <td>
                         @item.Description

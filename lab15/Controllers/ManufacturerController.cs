@@ -16,32 +16,27 @@ namespace lab15.Controllers
         public IActionResult Index()
         {
             var devices = _dbContext.Manufacturers
-                .Include(s => s.Devices)
+                .Include(m => m.Devices)
                 .ToList();
 
             return View(devices);
         }
 
-        public IActionResult Details(int? Id)
+        public async Task<IActionResult> Details(int? Id)
         {
             if (Id == null)
             {
                 return NotFound();
             }
             var manufacturer = _dbContext.Manufacturers
-                .Include(s => s.Devices)
+                .Include(m => m.Devices)
                 .FirstOrDefault(d => d.Id == Id);
 
             if (manufacturer == null)
             {
                 return NotFound();
             }
-            foreach (var device in manufacturer.Devices)
-            {
-                device.Seller = _dbContext.Devices
-                    .Include(d => d.Seller)
-                    .FirstOrDefault(device => device.Id == Id).Seller;
-            }
+            ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
             return View(manufacturer);
         }
         public IActionResult Create()
@@ -53,13 +48,90 @@ namespace lab15.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(Manufacturer manufacturer)
         {
-            if (manufacturer != null /*&& manufacturer.Name != null && manufacturer.Description != null && manufacturer.Country != null*/)
+            if (ModelState.IsValid)
             {
                 _dbContext.Manufacturers.Add(manufacturer);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(manufacturer);
+        }
+        public IActionResult Edit(int? Id)
+        {
+            if (Id == null)
+            {
+                return NotFound();
+            }
+
+            var manufacturer = _dbContext.Manufacturers.FirstOrDefault(s => s.Id == Id);
+            return View(manufacturer);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        public async Task<IActionResult> Edit(int Id, Manufacturer manufacturer)
+        {
+            if (Id != manufacturer.Id)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    _dbContext.Manufacturers.Update(manufacturer);
+                    await _dbContext.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!ManufacturerExists(manufacturer.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index");
+            }
+            return View(manufacturer);
+        }
+
+        public IActionResult Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var manufacturer = _dbContext.Manufacturers
+                .Include(m => m.Devices)
+                .FirstOrDefault(s => s.Id == id);
+            if (manufacturer == null)
+            {
+                return NotFound();
+            }
+            return View(manufacturer);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var manufacturer = _dbContext.Manufacturers.FirstOrDefault(s => s.Id == id);
+            if (manufacturer != null)
+            {
+                _dbContext.Manufacturers.Remove(manufacturer);
+            }
+            _dbContext.SaveChanges();
+            return RedirectToAction("Index");
+        }
+        private bool ManufacturerExists(int id)
+        {
+            return (_dbContext.Manufacturers?.Any(item => item.Id == id)).GetValueOrDefault();
         }
     }
 }

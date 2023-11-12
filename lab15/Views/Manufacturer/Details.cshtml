@@ -1,4 +1,4 @@
-﻿@model lab15.Models.Manufacturer
+﻿@model Manufacturer
 
 <h2>Details</h2>
 <div>
@@ -52,9 +52,23 @@
                     <td>
                         @item.Price
                     </td>
-                    <td>
-                        @item.Seller.Name
-                    </td>
+                    
+                    @{
+                        string message = "???";
+                        foreach (var seller in ViewBag.Sellers as List<Seller>)
+                        {
+                            if (seller.Id == item.SellerId)
+                            {
+                                message = seller.Name;
+                                break;
+                            }
+
+                        }
+                    }
+                        <td>
+                            @message
+                        </td>
+                        
                     <td>
                         @item.Description
                     </td>
