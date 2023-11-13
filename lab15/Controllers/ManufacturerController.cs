@@ -37,6 +37,7 @@ namespace lab15.Controllers
                 return NotFound();
             }
             ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
+            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
             return View(manufacturer);
         }
         public IActionResult Create()
@@ -56,6 +57,7 @@ namespace lab15.Controllers
             }
             return View(manufacturer);
         }
+
         public IActionResult Edit(int? Id)
         {
             if (Id == null)

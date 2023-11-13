@@ -5,18 +5,18 @@ using Microsoft.EntityFrameworkCore;
 
 namespace lab15.Controllers
 {
-    public class SellerController : Controller
+    public class CategoryController : Controller
     {
         private readonly ApplicationDbContext _dbContext;
 
-        public SellerController(ApplicationDbContext dbContext)
+        public CategoryController(ApplicationDbContext dbContext)
         {
             _dbContext = dbContext;
         }
         public IActionResult Index()
         {
-            var devices = _dbContext.Sellers
-                .Include(s => s.Devices) 
+            var devices = _dbContext.Categories
+                .Include(c => c.Devices)
                 .ToList();
 
             return View(devices);
@@ -28,10 +28,10 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            var seller = _dbContext.Sellers
-                .Include(s => s.Devices)
-                .FirstOrDefault(s => s.Id == Id);
-            
+            var seller = _dbContext.Categories
+                .Include(c => c.Devices)
+                .FirstOrDefault(c => c.Id == Id);
+
             if (seller == null)
             {
                 return NotFound();
@@ -44,7 +44,7 @@ namespace lab15.Controllers
             //}
 
             ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
-            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
+            ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
             return View(seller);
         }
 
@@ -55,35 +55,35 @@ namespace lab15.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public IActionResult Create(Category category)
         {
             if (ModelState.IsValid)
             {
-                _dbContext.Sellers.Add(seller);
+                _dbContext.Categories.Add(category);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(seller);
+            return View(category);
         }
 
         public IActionResult Edit(int? Id)
         {
-            if(Id == null) 
+            if (Id == null)
             {
                 return NotFound();
             }
 
-            var seller = _dbContext.Sellers.FirstOrDefault(s => s.Id == Id);
-            return View(seller);
+            var category = _dbContext.Categories.FirstOrDefault(s => s.Id == Id);
+            return View(category);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        
-        public async Task<IActionResult> Edit(int Id, Seller seller)
+
+        public async Task<IActionResult> Edit(int Id, Category category)
         {
-            if (Id != seller.Id)
+            if (Id != category.Id)
             {
                 return NotFound();
             }
@@ -91,12 +91,12 @@ namespace lab15.Controllers
             {
                 try
                 {
-                    _dbContext.Sellers.Update(seller);
+                    _dbContext.Categories.Update(category);
                     await _dbContext.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!SellerExists(seller.Id))
+                    if (!CategoryExists(category.Id))
                     {
                         return NotFound();
                     }
@@ -107,22 +107,23 @@ namespace lab15.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(seller);
+            return View(category);
         }
 
-        public IActionResult Delete(int? id) 
+        public IActionResult Delete(int? id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var seller = _dbContext.Sellers.Include(s => s.Devices)
-                .FirstOrDefault(s => s.Id == id);
-            if (seller == null)
+            var category = _dbContext.Categories
+                .Include(с => с.Devices)
+                .FirstOrDefault(с => с.Id == id);
+            if (category == null)
             {
                 return NotFound();
             }
-            return View(seller);
+            return View(category);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -130,19 +131,18 @@ namespace lab15.Controllers
 
         public IActionResult DeleteConfirmed(int id)
         {
-            var seller = _dbContext.Sellers.FirstOrDefault(s => s.Id == id);
-            if (seller != null)
+            var category = _dbContext.Categories.FirstOrDefault(c => c.Id == id);
+            if (category != null)
             {
-                _dbContext.Sellers.Remove(seller);
+                _dbContext.Categories.Remove(category);
             }
             _dbContext.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        private bool SellerExists(int id)
+        private bool CategoryExists(int id)
         {
-            return (_dbContext.Sellers?.Any(item => item.Id == id)).GetValueOrDefault();
+            return (_dbContext.Categories?.Any(item => item.Id == id)).GetValueOrDefault();
         }
     }
 }
-    

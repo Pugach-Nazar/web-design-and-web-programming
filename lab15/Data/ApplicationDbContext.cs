@@ -13,6 +13,7 @@ namespace lab15.Data
         public DbSet<Device> Devices { get; set; }
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Seller> Sellers { get; set;}
+        public DbSet<Category> Categories { get; set;}
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -27,6 +28,11 @@ namespace lab15.Data
                 .HasOne(d => d.Seller)
                 .WithMany(s => s.Devices)
                 .HasForeignKey(d => d.SellerId);
+
+            builder.Entity<Device>()
+                .HasOne(d => d.Category)
+                .WithMany(c => c.Devices)
+                .HasForeignKey(d => d.CategoryId);
         }
     }
 }

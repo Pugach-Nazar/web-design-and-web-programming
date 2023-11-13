@@ -32,6 +32,9 @@
                     Manufacturer
                 </th>
                 <th>
+                    Category
+                </th>
+                <th>
                     Description
                 </th>
             </tr>
@@ -53,6 +56,20 @@
                             if(man.Id == item.ManufacturerId)
                             {
                                 message = man.Name;
+                                break;
+                            }
+                        }
+                    }
+                    <td>
+                        @message
+                    </td>
+                    @{
+                        message = "???";
+                        foreach (var cat in ViewBag.Categories as List<Category>)
+                        {
+                            if(cat.Id == item.CategoryId)
+                            {
+                                message = cat.Name;
                                 break;
                             }
                         }

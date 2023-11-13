@@ -18,7 +18,8 @@ namespace lab15.Controllers
             var devices = _dbContext.Devices
                 .Include(d => d.Manufacturer)
                 .Include(d => d.Seller)
-                .ToList();
+                .Include(d => d.Category)
+                .ToList(); 
             return View(devices);
         }
 
@@ -31,6 +32,7 @@ namespace lab15.Controllers
             var devices = _dbContext.Devices
                 .Include (d => d.Manufacturer)
                 .Include(d => d.Seller)
+                .Include (d => d.Category)
                 .FirstOrDefault(d => d.Id == Id);
             if(devices == null)
             {
@@ -43,6 +45,7 @@ namespace lab15.Controllers
         {
             ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
             ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
+            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
             return View();
         }
 
@@ -60,6 +63,7 @@ namespace lab15.Controllers
             }
             ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
             ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
+            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
             return View(device);
         }
         public async Task<IActionResult> Edit(int? Id)
@@ -71,6 +75,7 @@ namespace lab15.Controllers
 
             ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
             ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
+            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
 
             var device = _dbContext.Devices.FirstOrDefault(s => s.Id == Id);
             return View(device);
@@ -108,6 +113,7 @@ namespace lab15.Controllers
             }
             ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
             ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
+            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
             return View(device);
         }
 
@@ -120,6 +126,7 @@ namespace lab15.Controllers
             var device = _dbContext.Devices
                 .Include(d => d.Manufacturer)
                 .Include(d => d.Seller)
+                .Include (d => d.Category)
                 .FirstOrDefault(s => s.Id == id);
             if (device == null)
             {

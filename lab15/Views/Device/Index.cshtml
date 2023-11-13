@@ -20,6 +20,9 @@
                 Seller
             </th>
             <th>
+                Category
+            </th>
+            <th>
                 Description
             </th>
             <th>
@@ -41,6 +44,9 @@
                 </td>
                 <td>
                     <a asp-controller="Seller" asp-action="Details" asp-route-id="@item.Seller.Id">@item.Seller.Name</a>
+                </td>
+                <td>
+                    <a asp-controller="Category" asp-action="Details" asp-route-id="@item.Seller.Id">@item.Category.Name</a>
                 </td>
                 <td>
                         @item.Description

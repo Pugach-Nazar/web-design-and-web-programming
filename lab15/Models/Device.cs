@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace lab15.Models
 {
@@ -11,12 +10,16 @@ namespace lab15.Models
         [Required]
         public int SellerId { get; set; }
         [Required]
+        public int CategoryId { get; set; }
+        [Required]
+
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
         [Required]
-        public decimal Price {  get; set; }
-        
+        public decimal Price { get; set; }
+
+        public Category? Category { get; set; }
         public Manufacturer? Manufacturer { get; set; }
         public Seller? Seller { get; set; }
     }
