@@ -1,10 +1,15 @@
-﻿@model Category
+﻿@using lab15.ViewModels
+@model CategoryViewModel
 
 <h2>Create a new category</h2>
 <form method="post">
     <div class="border p-3 mt-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
+            }
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control" />
             <span asp-validation-for="Name" class="text-danger"></span>

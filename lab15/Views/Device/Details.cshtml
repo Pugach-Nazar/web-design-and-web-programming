@@ -1,40 +1,52 @@
-﻿
-@model Device
+﻿@using lab15.ViewModels
+@model DeviceViewModel
 
 <h2>Details</h2>
 <div>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Name)
+            Name
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Name)
+            @Model.Name
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Price)
+            Price
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Price)
+            @Model.Price
         </dd>
         <dt class="col-sm-2">
             Manufacturer
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Manufacturer.Name)
+            @Model.Manufacturer
+        </dd>
+        <dt class="col-sm-2">
+            Category
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Category
         </dd>
         <dt class="col-sm-2">
             Seller
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Seller.Name)
+            @Model.Seller
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Description)
+            Amount
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Description)
+            @Model.Amount
         </dd>
     </dl>
+    <div class="container">
+        <h3>Description</h3>
+        <p class="text-black">
+            @Model.Description
+        </p>
+    </div>
     <a asp-action="Index">Back to list</a>
 </div>

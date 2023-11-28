@@ -1,11 +1,16 @@
-﻿@model Category
+﻿@using lab15.ViewModels
+@model CategoryViewModel
 
-<h2>("Edit a "+ Model.Name )</h2>
+<h2>@("Edit a "+ Model.Name )</h2>
 <form method="post">
     <div class="border p-3 mt-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <input type="hidden" asp-for="Id" />
         <div class="form-group">
+            @if (ViewData["ErrorMessage"] != null)
+            {
+                <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
+            }
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control"/>
             <span asp-validation-for="Name" class="text-danger"></span>

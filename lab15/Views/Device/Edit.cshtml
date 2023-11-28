@@ -1,11 +1,16 @@
-﻿@model Device
+﻿@using lab15.ViewModels
+@model DeviceViewModel
 
-<h2>("Edit a "+ Model.Name )</h2>
+<h2>@("Edit a "+ Model.Name )</h2>
 
 <form method="post">
     <div class="border p-3 mt-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="Id"/>
+        @if (ViewData["ErrorMessage"] != null)
+            {
+                <h4 class="text-danger">@ViewData["ErrorMessage"]</h4>
+            }
         <div class="form-group">
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control" />
@@ -36,10 +41,25 @@
             </select>
             <span asp-validation-for="SellerId" class="text-danger"></span>
         </div>
+        <div>
+            <label asp-for="CategoryId">Category</label>
+            <select asp-for="CategoryId" class="form-control">
+                @foreach (var category in ViewBag.Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </select>
+            <span asp-validation-for="CategoryId" class="text-danger"></span>
+        </div>
         <div class="form-group">
             <label asp-for="Description">Description</label>
             <textarea asp-for="Description" class="form-control"></textarea>
             <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+         <div class="form-group">
+            <label asp-for="Amount">Amount</label>
+            <input asp-for="Amount" class="form-control" />
+            <span asp-validation-for="Amount" class="text-danger"></span>
         </div>
     </div>
         <button type="submit" class="btn btn-primary">Submit</button>

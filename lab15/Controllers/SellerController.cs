@@ -1,5 +1,6 @@
 ﻿using lab15.Data;
 using lab15.Models;
+using lab15.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,13 +17,14 @@ namespace lab15.Controllers
         public IActionResult Index()
         {
             var devices = _dbContext.Sellers
-                .Include(s => s.Devices) 
+                .Include(s => s.Devices)
+                .Select(s => new SellerViewModel(s))
                 .ToList();
 
             return View(devices);
         }
 
-        public async Task<IActionResult> Details(int? Id)
+        public IActionResult Details(int? Id)
         {
             if (Id == null)
             {
@@ -36,16 +38,18 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            //foreach (var device in seller.Devices)
-            //{
-            //    device.Manufacturer = _dbContext.Devices
-            //        .Include(d => d.Manufacturer)
-            //        .FirstOrDefault(device => device.Id == Id).Manufacturer;
-            //}
+            var devicesFromDb = _dbContext.Devices
+                .Include(d => d.Manufacturer)
+                .Include(d => d.Category);
 
-            ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
-            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
-            return View(seller);
+            foreach (var device in seller.Devices)
+            {
+                var deviceFromDb = devicesFromDb.FirstOrDefault(d => d.Id == device.Id);
+                device.Manufacturer = deviceFromDb.Manufacturer;
+                device.Category = deviceFromDb.Category;
+            }
+            var sellseModel = new SellerViewModel(seller);
+            return View(sellseModel);
         }
 
         public IActionResult Create()
@@ -55,15 +59,21 @@ namespace lab15.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seller seller)
+        public IActionResult Create(SellerViewModel sellerModel)
         {
             if (ModelState.IsValid)
             {
+                if (_dbContext.Sellers.Any(c => c.Name.ToLower() == sellerModel.Name.ToLower()))
+                {
+                    ViewData["ErrorMessage"] = $"Seller {sellerModel.Name} already exist";
+                    return View(sellerModel);
+                }
+                var seller = new Seller(sellerModel);
                 _dbContext.Sellers.Add(seller);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(seller);
+            return View(sellerModel);
         }
 
         public IActionResult Edit(int? Id)
@@ -74,21 +84,34 @@ namespace lab15.Controllers
             }
 
             var seller = _dbContext.Sellers.FirstOrDefault(s => s.Id == Id);
-            return View(seller);
+            if (seller == null)
+                return NotFound();
+            var sellerModel = new SellerViewModel(seller);
+            return View(sellerModel);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         
-        public async Task<IActionResult> Edit(int Id, Seller seller)
+        public async Task<IActionResult> Edit(int Id, SellerViewModel sellerModel)
         {
-            if (Id != seller.Id)
+            if (Id != sellerModel.Id)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
+                var seller = _dbContext.Sellers.FirstOrDefault(s=>s.Id == Id);
+                if (seller.Name == sellerModel.Name)
+                {
+                    if (_dbContext.Sellers.Any(c => c.Name.ToLower() == sellerModel.Name.ToLower()))
+                    {
+                        ViewData["ErrorMessage"] = $"Seller {sellerModel.Name} already exist";
+                        return View(sellerModel);
+                    }
+                }
+                seller = new Seller(sellerModel);
                 try
                 {
                     _dbContext.Sellers.Update(seller);
@@ -107,7 +130,7 @@ namespace lab15.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(seller);
+            return View(sellerModel);
         }
 
         public IActionResult Delete(int? id) 
@@ -122,7 +145,8 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            return View(seller);
+            var sellerModel = new SellerViewModel(seller);
+            return View(sellerModel);
         }
 
         [HttpPost, ActionName("Delete")]

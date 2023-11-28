@@ -1,4 +1,6 @@
-﻿@model List<Category>
+﻿@using lab15.ViewModels
+
+@model List<CategoryViewModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -25,7 +27,7 @@
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">More</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Show</a>
                 </td>
             </tr>
         }

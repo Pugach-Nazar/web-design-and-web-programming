@@ -1,9 +1,15 @@
-﻿@model Seller
+﻿@using lab15.ViewModels
+@model SellerViewModel
 
 <h2>Create a new seller</h2>
 <form method="post">
     <div class="border p-3 mt-4">
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
+        }
         <div class="form-group">
             <label asp-for="Name">Name</label>
             <input asp-for="Name" class="form-control" />

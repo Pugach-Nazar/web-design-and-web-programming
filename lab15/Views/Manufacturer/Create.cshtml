@@ -1,8 +1,14 @@
-﻿@model Manufacturer
+﻿@using lab15.ViewModels
+@model ManufacturerViewModel
 
 <h2>Create a new manufacturer</h2>
 <form method="post"> 
     <div class="border p-3 mt-4">
+
+        @if (ViewData["ErrorMessage"] != null)
+        {
+            <h3 class="text-danger">@ViewData["ErrorMessage"]</h3>
+        }
         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
         <div class="form-group">
             <label asp-for="Name">Name</label>

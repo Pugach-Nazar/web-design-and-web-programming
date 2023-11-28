@@ -1,4 +1,5 @@
-﻿@model Seller
+﻿@using lab15.ViewModels
+@model SellerViewModel
 
 <div>
     <dl class="row">
@@ -15,7 +16,7 @@
             @Model.Description
         </dd>
     </dl>
-    @if(Model.Devices.Count > 0)
+    @if(Model.DevicesView.Count > 0)
     {
         <form method="post" asp-action="Delete">
             <input type="hidden" asp-for="Id" />

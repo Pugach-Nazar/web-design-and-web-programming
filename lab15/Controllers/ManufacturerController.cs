@@ -1,5 +1,6 @@
 ﻿using lab15.Data;
 using lab15.Models;
+using lab15.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -15,30 +16,41 @@ namespace lab15.Controllers
         }
         public IActionResult Index()
         {
-            var devices = _dbContext.Manufacturers
-                .Include(m => m.Devices)
+            var devicesModel = _dbContext.Manufacturers
+                .Select(m => new ManufacturerViewModel(m))
                 .ToList();
 
-            return View(devices);
+            return View(devicesModel);
         }
 
-        public async Task<IActionResult> Details(int? Id)
+        public IActionResult Details(int? Id)
         {
             if (Id == null)
             {
                 return NotFound();
             }
+
             var manufacturer = _dbContext.Manufacturers
                 .Include(m => m.Devices)
-                .FirstOrDefault(d => d.Id == Id);
+                .FirstOrDefault(m => m.Id == Id);
 
             if (manufacturer == null)
             {
                 return NotFound();
             }
-            ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
-            ViewBag.Categories = await _dbContext.Categories.ToListAsync();
-            return View(manufacturer);
+
+            var devicesFromDb = _dbContext.Devices
+                .Include(d => d.Seller)
+                .Include(d => d.Category);
+
+            foreach (var device in manufacturer.Devices)
+            {
+                var deviceFromDb = devicesFromDb.FirstOrDefault(d => d.Id == device.Id);
+                device.Seller = deviceFromDb.Seller;
+                device.Category = deviceFromDb.Category;
+            }
+            var manufacturerModel = new ManufacturerViewModel(manufacturer);
+            return View(manufacturerModel);
         }
         public IActionResult Create()
         {
@@ -47,15 +59,21 @@ namespace lab15.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Manufacturer manufacturer)
+        public IActionResult Create(ManufacturerViewModel manufacturerModel)
         {
             if (ModelState.IsValid)
             {
+                if (_dbContext.Manufacturers.Any(c => c.Name.ToLower() == manufacturerModel.Name.ToLower()))
+                {
+                    ViewData["ErrorMessage"] = $"Manufacturer {manufacturerModel.Name} already exist";
+                    return View(manufacturerModel);
+                }
+                var manufacturer = new Manufacturer(manufacturerModel);
                 _dbContext.Manufacturers.Add(manufacturer);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(manufacturer);
+            return View(manufacturerModel);
         }
 
         public IActionResult Edit(int? Id)
@@ -66,21 +84,34 @@ namespace lab15.Controllers
             }
 
             var manufacturer = _dbContext.Manufacturers.FirstOrDefault(s => s.Id == Id);
-            return View(manufacturer);
+            if (manufacturer == null)
+                return NotFound();
+            var manufacturerModel = new ManufacturerViewModel(manufacturer);
+            return View(manufacturerModel);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int Id, Manufacturer manufacturer)
+        public async Task<IActionResult> Edit(int Id, ManufacturerViewModel manufacturerModel)
         {
-            if (Id != manufacturer.Id)
+            if (Id != manufacturerModel.Id)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
+                var manufacturer = _dbContext.Manufacturers.FirstOrDefault(m => m.Id == Id);
+                if(manufacturer.Name != manufacturerModel.Name)
+                {
+                    if (_dbContext.Manufacturers.Any(c => c.Name.ToLower() == manufacturerModel.Name.ToLower()))
+                    {
+                        ViewData["ErrorMessage"] = $"Manufacturer {manufacturerModel.Name} already exist";
+                        return View(manufacturerModel);
+                    }
+                }
+                manufacturer.UpdateFromViewModel(manufacturerModel);
                 try
                 {
                     _dbContext.Manufacturers.Update(manufacturer);
@@ -99,7 +130,7 @@ namespace lab15.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(manufacturer);
+            return View(manufacturerModel);
         }
 
         public IActionResult Delete(int? id)
@@ -115,7 +146,8 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            return View(manufacturer);
+            var manufacturerModel = new ManufacturerViewModel(manufacturer);
+            return View(manufacturerModel);
         }
 
         [HttpPost, ActionName("Delete")]

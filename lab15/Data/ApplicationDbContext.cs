@@ -14,6 +14,7 @@ namespace lab15.Data
         public DbSet<Manufacturer> Manufacturers { get; set; }
         public DbSet<Seller> Sellers { get; set;}
         public DbSet<Category> Categories { get; set;}
+        public DbSet<Purchase> Purchase { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -33,6 +34,7 @@ namespace lab15.Data
                 .HasOne(d => d.Category)
                 .WithMany(c => c.Devices)
                 .HasForeignKey(d => d.CategoryId);
+
         }
     }
 }

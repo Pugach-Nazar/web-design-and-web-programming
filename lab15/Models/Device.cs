@@ -1,26 +1,45 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using lab15.ViewModels;
 
 namespace lab15.Models
 {
     public class Device
     {
         public int Id { get; set; }
-        [Required]
         public int ManufacturerId { get; set; }
-        [Required]
         public int SellerId { get; set; }
-        [Required]
         public int CategoryId { get; set; }
-        [Required]
-
         public string Name { get; set; }
-        [Required]
         public string Description { get; set; }
-        [Required]
         public decimal Price { get; set; }
+        public int Amount {  get; set; }
 
         public Category? Category { get; set; }
         public Manufacturer? Manufacturer { get; set; }
         public Seller? Seller { get; set; }
+
+
+        public Device() { }
+        public Device(DeviceViewModel deviceViewModel)
+        {
+            Id = deviceViewModel.Id;
+            ManufacturerId = deviceViewModel.ManufacturerId;
+            SellerId = deviceViewModel.SellerId;
+            CategoryId = deviceViewModel.CategoryId;
+            Name = deviceViewModel.Name;
+            Description = deviceViewModel.Description;
+            Price = deviceViewModel.Price;
+            Amount = deviceViewModel.Amount;
+        }
+        public void UpdateFromViewModel(DeviceViewModel deviceViewModel)
+        {
+            Id = deviceViewModel.Id;
+            ManufacturerId = deviceViewModel.ManufacturerId;
+            SellerId = deviceViewModel.SellerId;
+            CategoryId = deviceViewModel.CategoryId;
+            Name = deviceViewModel.Name;
+            Description = deviceViewModel.Description;
+            Price = deviceViewModel.Price;
+            Amount = deviceViewModel.Amount;
+        }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model List<Device>
+﻿@using lab15.ViewModels
+@model List<DeviceViewModel>
 @{
     ViewData["Title"] = "Home Page";
 }
@@ -23,10 +24,10 @@
                 Category
             </th>
             <th>
-                Description
+                More
             </th>
             <th>
-                More
+                Buy
             </th>
         </tr>
     </thead>
@@ -40,22 +41,31 @@
                 <td>
                     @item.Price
                 <td>
-                    <a asp-controller="Manufacturer" asp-action="Details" asp-route-id="@item.Manufacturer.Id">@item.Manufacturer.Name</a> 
+                    <a asp-controller="Manufacturer" asp-action="Details" asp-route-id="@item.ManufacturerId">@item.Manufacturer</a> 
                 </td>
                 <td>
-                    <a asp-controller="Seller" asp-action="Details" asp-route-id="@item.Seller.Id">@item.Seller.Name</a>
+                    <a asp-controller="Seller" asp-action="Details" asp-route-id="@item.SellerId">@item.Seller</a>
                 </td>
                 <td>
-                    <a asp-controller="Category" asp-action="Details" asp-route-id="@item.Seller.Id">@item.Category.Name</a>
-                </td>
-                <td>
-                        @item.Description
+                    <a asp-controller="Category" asp-action="Details" asp-route-id="@item.CategoryId">@item.Category</a>
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                     <a asp-action="Delete" asp-route-id="@item.Id">Delete</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 </td>
+                    @if (item.Amount == 0)
+                    {
+                    <td>
+                        <p class="text-danger">Sold out</p>
+                    </td>
+                    }
+                    else
+                    {
+                    <td>
+                        <a asp-action="Buy" asp-route-id="@item.Id">Buy</a>
+                    </td>
+                    }
             </tr>
         }
     </tbody>

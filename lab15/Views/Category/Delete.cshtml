@@ -1,12 +1,13 @@
-﻿@model Category
+﻿@using lab15.ViewModels
+@model CategoryViewModel
 
 <div class="form-group">
     <h2>@("Delete a category: "+ Model.Name )</h2>
-    @if(Model.Devices.Count > 0)
+    @if (Model.DevicesView.Count > 0)
     {
         <form method="post" asp-action="Delete">
             <input type="hidden" asp-for="Id" />
-            <h3 class="text-danger">cannot delete a category, still has the goods</h3>
+            <h3 class="text-danger">Cannot delete a category, still has the goods</h3>
             <input type="submit" disabled value="Delete" class="btn btn-danger" />
             <br />
             <a asp-action="Index">Back to List</a>

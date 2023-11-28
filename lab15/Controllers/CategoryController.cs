@@ -1,5 +1,6 @@
 ﻿using lab15.Data;
 using lab15.Models;
+using lab15.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -16,36 +17,40 @@ namespace lab15.Controllers
         public IActionResult Index()
         {
             var devices = _dbContext.Categories
-                .Include(c => c.Devices)
+                .Select(c => new CategoryViewModel(c))
                 .ToList();
 
             return View(devices);
         }
 
-        public async Task<IActionResult> Details(int? Id)
+        public IActionResult Details(int? Id)
         {
             if (Id == null)
             {
                 return NotFound();
             }
-            var seller = _dbContext.Categories
+
+            var category = _dbContext.Categories
                 .Include(c => c.Devices)
                 .FirstOrDefault(c => c.Id == Id);
-
-            if (seller == null)
+            if (category == null)
             {
                 return NotFound();
             }
-            //foreach (var device in seller.Devices)
-            //{
-            //    device.Manufacturer = _dbContext.Devices
-            //        .Include(d => d.Manufacturer)
-            //        .FirstOrDefault(device => device.Id == Id).Manufacturer;
-            //}
+            var devicesFromBb = _dbContext.Devices
+                    .Include(d => d.Manufacturer)
+                    .Include(d => d.Seller);
 
-            ViewBag.Manufacturers = await _dbContext.Manufacturers.ToListAsync();
-            ViewBag.Sellers = await _dbContext.Sellers.ToListAsync();
-            return View(seller);
+            foreach (var device in category.Devices)
+            {
+                var deviceFromBd = devicesFromBb.FirstOrDefault(d => d.Id == device.Id);
+                device.Manufacturer = deviceFromBd.Manufacturer;
+                device.Seller = deviceFromBd.Seller;
+            }
+
+            var categoryModel = new CategoryViewModel(category);
+
+            return View(categoryModel);
         }
 
         public IActionResult Create()
@@ -55,15 +60,21 @@ namespace lab15.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Category category)
+        public IActionResult Create(CategoryViewModel categoryModel)
         {
             if (ModelState.IsValid)
             {
+                if (_dbContext.Categories.Any(c => c.Name.ToLower() == categoryModel.Name.ToLower()))
+                {
+                    ViewData["ErrorMessage"] = $"Category {categoryModel.Name} already exist";
+                    return View(categoryModel);
+                }
+                var category = new Category(categoryModel);
                 _dbContext.Categories.Add(category);
                 _dbContext.SaveChanges();
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View(categoryModel);
         }
 
         public IActionResult Edit(int? Id)
@@ -74,21 +85,31 @@ namespace lab15.Controllers
             }
 
             var category = _dbContext.Categories.FirstOrDefault(s => s.Id == Id);
-            return View(category);
+            if (category == null) 
+                return NotFound();
+            var categoryModel = new CategoryViewModel(category);
+            return View(categoryModel);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
 
-        public async Task<IActionResult> Edit(int Id, Category category)
+        public async Task<IActionResult> Edit(int Id, CategoryViewModel categoryModel)
         {
-            if (Id != category.Id)
+            if (Id != categoryModel.Id)
             {
                 return NotFound();
             }
             if (ModelState.IsValid)
             {
+                if (_dbContext.Categories.Any(c => c.Name.ToLower() == categoryModel.Name.ToLower()))
+                {
+                    ViewData["ErrorMessage"] = $"Category {categoryModel.Name} already exist";
+                    return View(categoryModel);
+                }
+
+                var category = new Category(categoryModel);
                 try
                 {
                     _dbContext.Categories.Update(category);
@@ -107,7 +128,7 @@ namespace lab15.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(category);
+            return View(categoryModel);
         }
 
         public IActionResult Delete(int? id)
@@ -123,7 +144,8 @@ namespace lab15.Controllers
             {
                 return NotFound();
             }
-            return View(category);
+            var categoryModel = new CategoryViewModel(category);
+            return View(categoryModel);
         }
 
         [HttpPost, ActionName("Delete")]
@@ -135,10 +157,12 @@ namespace lab15.Controllers
             if (category != null)
             {
                 _dbContext.Categories.Remove(category);
+                _dbContext.SaveChanges();
             }
-            _dbContext.SaveChanges();
+            
             return RedirectToAction("Index");
         }
+
 
         private bool CategoryExists(int id)
         {

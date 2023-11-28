@@ -1,8 +1,13 @@
-﻿@model Category
+﻿@using lab15.ViewModels
+@model CategoryViewModel
 
 <h2>Details</h2>
 <div>
     <h3>@Model.Name</h3>
+    @if (Model.DevicesView == null)
+    {
+        <h3>This manufacturer has no products</h3>
+    }
     <table class="table">
         <thead>
             <tr>
@@ -24,7 +29,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model.Devices)
+            @foreach (var item in Model.DevicesView)
             {
                 <tr>
                     <td>
@@ -33,33 +38,11 @@
                     <td>
                         @item.Price
                     </td>
-                    @{
-                        string message = "???";
-                        foreach (var man in ViewBag.Manufacturers as List<Manufacturer>)
-                        {
-                            if(man.Id == item.ManufacturerId)
-                            {
-                                message = man.Name;
-                                break;
-                            }
-                        }
-                    }
                     <td>
-                        @message
+                        @item.Manufacturer
                     </td>
-                    @{
-                        message = "???";
-                        foreach (var man in ViewBag.Sellers as List<Seller>)
-                        {
-                            if (man.Id == item.ManufacturerId)
-                            {
-                                message = man.Name;
-                                break;
-                            }
-                        }
-                    }
                     <td>
-                        @message
+                        @item.Seller
                     </td>
                     <td>
                         @item.Description
