@@ -222,6 +222,7 @@ namespace lab15.Controllers
                     return NotFound();
                 }
                 device.Amount --;
+                purchase.DateTime = DateTime.Now;
                 try
                 {
                     await _dbContext.Purchase.AddAsync(purchase);
@@ -240,6 +241,16 @@ namespace lab15.Controllers
         private bool DeviceExists(int id)
         {
             return (_dbContext.Devices?.Any(item => item.Id == id)).GetValueOrDefault();
+        }
+
+        public IActionResult IsNameUnique(string name, int sellerId)
+        {
+            var seller = _dbContext.Sellers.Include(s => s.Devices).FirstOrDefault(s => s.Id == sellerId);
+            if (seller.Devices.Any(d => d.Name.ToLower() == name.ToLower()))
+            {
+                return Json(false);
+            }
+            return Json(true);
         }
     }
 }

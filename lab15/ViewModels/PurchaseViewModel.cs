@@ -5,9 +5,12 @@ namespace lab15.ViewModels
 {
     public class PurchaseViewModel
     {
-        [Key]
+        [Required]
         public int Id { get; set; }
+        [Required]
+        [StringLength(50, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
         public string UserName { get; set; }
+        [Required]
         public int DeviceId { get; set; }
         public DateTime DateTime { get; set; }
 

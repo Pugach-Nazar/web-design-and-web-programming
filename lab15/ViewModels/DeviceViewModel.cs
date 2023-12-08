@@ -1,4 +1,5 @@
 ﻿using lab15.Models;
+using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 
 namespace lab15.ViewModels
@@ -13,6 +14,7 @@ namespace lab15.ViewModels
         [Required]
         public int CategoryId { get; set; }
         [Required]
+        [Remote("IsNameUnique", "Device",AdditionalFields = "SellerId", ErrorMessage = "This seller already has such a product")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Length must be more than 2 characters")]
         public string Name { get; set; }
         [Required]

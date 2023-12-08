@@ -167,5 +167,15 @@ namespace lab15.Controllers
         {
             return (_dbContext.Manufacturers?.Any(item => item.Id == id)).GetValueOrDefault();
         }
+
+        public IActionResult IsNameUnique(string name)
+        {
+
+            if (_dbContext.Manufacturers.Any(c => c.Name.ToLower() == name.ToLower()))
+            {
+                return Json(false);
+            }
+            return Json(true);
+        }
     }
 }
